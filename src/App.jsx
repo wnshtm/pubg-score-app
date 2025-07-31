@@ -12,23 +12,31 @@ function calculateScore(kill, damage, assist) {
 
 export default function App() {
   const [players, setPlayers] = useState(() =>
-    Array.from({ length: 4 }, () => ({ nickname: "", kill: 0, assist: 0, damage: 0 }))
+    Array.from({ length: 4 }, () => ({ nickname: "", kill: "", assist: "", damage: "" }))
   );
 
   const handleChange = (index, field, value) => {
     const newPlayers = [...players];
-    newPlayers[index][field] = field === "nickname" ? value : parseInt(value || 0, 10);
+    if (field !== 'nickname' && !/^\d*$/.test(value)) {
+      return;
+    }
+    newPlayers[index][field] = value;
     setPlayers(newPlayers);
   };
 
   const results = useMemo(() => {
-    if (players.every(p => p.kill === 0 && p.assist === 0 && p.damage === 0)) {
+    if (players.every(p => !p.kill && !p.assist && !p.damage)) {
       return [];
     }
-    const scored = players.map((p) => ({
-      ...p,
-      score: calculateScore(p.kill, p.damage, p.assist),
-    }));
+    const scored = players.map((p) => {
+      const kill = parseInt(p.kill || 0, 10);
+      const damage = parseInt(p.damage || 0, 10);
+      const assist = parseInt(p.assist || 0, 10);
+      return {
+        ...p,
+        score: calculateScore(kill, damage, assist),
+      };
+    });
     scored.sort((a, b) => b.score - a.score);
     return scored;
   }, [players]);
