@@ -1,1 +1,1 @@
-Fix: Allow empty input fields for numbers
+Build: Prompt for PWA updates
