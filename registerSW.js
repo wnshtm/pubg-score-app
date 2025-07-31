@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/pubg-score-app/sw.js', { scope: '/pubg-score-app/' })})}
